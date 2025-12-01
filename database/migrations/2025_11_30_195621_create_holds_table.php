@@ -13,7 +13,15 @@ return new class extends Migration
     {
         Schema::create('holds', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('product_id')->constrained()->cascadeOnDelete();
+            $table->integer('quantity');
+            $table->enum('status',['active','expired','used'])->default('active');
+            $table->timestamp('expires_at');
             $table->timestamps();
+
+             $table->index(['status','expires_at']);//for expiry checks
+             $table->index('product_id');//for product lookup
+
         });
     }
 
