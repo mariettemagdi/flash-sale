@@ -26,7 +26,7 @@ class ProductController extends Controller
         fn()=>Product::find($id));
 
         if(!$product){
-           return response()->json(['error'=>'Product not Found'],404); 
+            return response()->json(['error'=>'Product not Found'],404); 
         }
 
         //*1000 converts from seconds to milliseconds
