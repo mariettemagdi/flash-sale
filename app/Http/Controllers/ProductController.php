@@ -14,7 +14,7 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id):JsonResponse
+    public function show(int $id):JsonResponse
     {
         //take id instead of prodcut to avoid bypassing cache
         //current time in microseconds
@@ -30,7 +30,7 @@ class ProductController extends Controller
         }
 
         //*1000 converts from seconds to milliseconds
-        $duration=(mocrotime(true)-$startTime)*1000;
+        $duration=(microtime(true)-$startTime)*1000;
 
         Log::info('Product fetched',[
             'product_id'=>$id,
@@ -42,7 +42,7 @@ class ProductController extends Controller
         return response()->json([
             'id'=>$product->id,
             'name'=>$product->name,
-            'ptice'=>$product->price,
+            'price'=>$product->price,
             'available_stock' =>$product->stock,
         ]);
 

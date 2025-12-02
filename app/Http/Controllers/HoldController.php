@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Hold;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Http\JsonResponse;
 
 class HoldController extends Controller
 {
@@ -66,7 +68,7 @@ class HoldController extends Controller
 
             }catch (\Illuminate\Database\QueryException $e){
 
-                if($e->getCode==='4001' || str_cpntains($e->getMessage(),'Deadlock')){
+                if($e->getCode()==='4001' || str_contains($e->getMessage(),'Deadlock')){
                     $retries++;
 
                     Log::warning('Deadlock detected, retrying', [
@@ -75,7 +77,7 @@ class HoldController extends Controller
                     ]);
                 
                     if($retries >= $maxRetries){
-                                                Log::error('Max retries reached for hold creation', [
+                        Log::error('Max retries reached for hold creation', [
                                 'product_id' => $validated['product_id'],
                             ]);
                             return response()->json([
@@ -87,6 +89,8 @@ class HoldController extends Controller
                 }
             throw $e;
 
+            } catch (\Illuminate\Validation\ValidationException $e) {
+                return response()->json(['errors' => $e->errors()], 422);
             }
         }
         return response()->json(['error' => 'Failed to create hold'],500);

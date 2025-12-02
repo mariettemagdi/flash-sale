@@ -24,11 +24,11 @@ class Order extends Model
         'total_price'=>'decimal:2',
     ];
 
-    public function hold():BelongTo{
-        return $this->belongTo(Hold::Class);
+    public function hold():BelongsTo{
+        return $this->belongsTo(Hold::Class);
     }
 
-    public function product():BelongTo {
-        return $this->belongTo(Product::class);
+    public function product():BelongsTo {
+        return $this->belongsTo(Product::class);
     }
 }
